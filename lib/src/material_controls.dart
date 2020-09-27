@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:flutter/cupertino.dart';
 import 'package:chewie/src/chewie_player.dart';
 import 'package:chewie/src/chewie_progress_colors.dart';
 import 'package:chewie/src/material_progress_bar.dart';
@@ -65,7 +65,7 @@ class _MaterialControlsState extends State<MaterialControls> {
                       _latestValue.isBuffering
                   ? const Expanded(
                       child: const Center(
-                        child: const CircularProgressIndicator(),
+                        child: const CupertinoActivityIndicator(),
                       ),
                     )
                   : _buildHitArea(),
@@ -114,7 +114,7 @@ class _MaterialControlsState extends State<MaterialControls> {
       duration: Duration(milliseconds: 300),
       child: Container(
         height: barHeight,
-        color: Theme.of(context).dialogBackgroundColor,
+        color: Colors.black54,
         child: Row(
           children: <Widget>[
             _buildPlayPause(controller),
@@ -152,6 +152,7 @@ class _MaterialControlsState extends State<MaterialControls> {
               chewieController.isFullScreen
                   ? Icons.fullscreen_exit
                   : Icons.fullscreen,
+                  color: Colors.white,
             ),
           ),
         ),
@@ -235,6 +236,7 @@ class _MaterialControlsState extends State<MaterialControls> {
                 (_latestValue != null && _latestValue.volume > 0)
                     ? Icons.volume_up
                     : Icons.volume_off,
+                    color: Colors.white,
               ),
             ),
           ),
@@ -256,6 +258,7 @@ class _MaterialControlsState extends State<MaterialControls> {
         ),
         child: Icon(
           controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+          color: Colors.white,
         ),
       ),
     );
@@ -269,12 +272,15 @@ class _MaterialControlsState extends State<MaterialControls> {
         ? _latestValue.duration
         : Duration.zero;
 
-    return Padding(
-      padding: EdgeInsets.only(right: 24.0),
-      child: Text(
-        '${formatDuration(position)} / ${formatDuration(duration)}',
-        style: TextStyle(
-          fontSize: 14.0,
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.only(right: 24.0,bottom: 0),
+        child: Text(
+          '${formatDuration(position)} / ${formatDuration(duration)}',
+          style: TextStyle(
+            fontSize: 14.0,
+            color: Colors.white
+          ),
         ),
       ),
     );
@@ -323,15 +329,7 @@ class _MaterialControlsState extends State<MaterialControls> {
   }
 
   void _playPause() {
-    bool isFinished;
-    if( _latestValue.duration != null)
-    {
-      isFinished = _latestValue.position >= _latestValue.duration;
-    }
-    else
-    {
-      isFinished = false;
-    }
+    bool isFinished = _latestValue.position >= _latestValue.duration;
 
     setState(() {
       if (controller.value.isPlaying) {
